@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  
+  <!-- STEP 1) these 3 following reasurces must be here in the top for time picker to work -->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+  
+</head>
+<body>
+  <h1>Jquery time picker</h1>
+    <form action="/" method="post">
+
+      <!-- STEP 2) this p tag should be the same with the given id -->
+        <p>Date: <input name="date" type="text" id="datepicker"></p>
+        
+        <input type="submit" value="send"/>
+    </form>
+
+    
+    <!-- STEP 3) this script can be here or top where resrources are at -->
+    <script>
+      $( function() {
+        $("#datepicker").datepicker().datepicker("setDate", new Date());
+      } );
+      // datepicker("setDate", new Date()  allows to have current date in input as default
+    </script>
+
+
+</body>
+</html>

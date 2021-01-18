@@ -1,0 +1,53 @@
+.b-red{
+      border:5px solid red;
+
+}
+.b-black{
+      border:5px solid black;
+
+}
+.b-green{
+            border:5px solid green;
+      
+}    
+.b-yellow{
+      border:5px solid yellow;
+
+}
+
+.b-blue{
+      border:5px solid blue;
+
+}
+
+/* .b-red, .b-black, .b-green, .b-yellow{
+      background-color: gray;
+      
+} */
+
+
+.box{
+      display: inline-block;
+      border: 2px solid black;
+      margin: 5px;
+      width: 45px;
+      height: 50%;
+      text-align: center;
+      vertical-align: baseline;
+      font-size: 16px;
+}
+
+.box2{
+      display: inline-block;
+      border: 2px solid black;
+      margin: 5px;
+      width: 45px;
+      height: 50%;
+      text-align: center;
+      vertical-align: baseline;
+      font-size: 16px;
+}
+.fill{
+      background-color: green;
+}
+

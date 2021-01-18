@@ -1,0 +1,184 @@
+<%- include('partials/header') %>
+   
+        
+            <input type="text" name="wordInput" placeholder="type in word here">
+            <button class="process-btn">Process</button>
+            <br>
+            <br>
+              
+            
+           
+      
+      
+      <div class="main-box">
+
+      </div>
+
+      <script>
+                  
+                  // Letter scores
+                  const a =1;
+                  const e =1;
+                  const i =1;
+                  const o =1;
+                  const u = 1;
+                  const l =1;
+                  const n =1;
+                  const s =1;
+                  const t=1;
+                  const r = 1;
+
+                  const d =2;
+                  const g = 2;
+
+                  const b = 3
+                  const c = 3;
+                  const m = 3;
+                  const p = 3;
+
+                  const f = 4;
+                  const h = 4
+                  const v =4;
+                  const w =4;
+                  const y =4;
+
+                  const k = 5;
+
+                  const j = 8;
+                  const x = 8;
+
+                  const q = 10;
+                  const z = 10;
+
+                  const group1 = ["a","e","i","o","u","l","n","s","t","r"];//1 point
+                  const group2 = ["d","g"];//2 point
+                  const group3 = ["b","c","m","p"];//3 point
+                  const group4 = ["f","h","v","w","y"];//4 point
+                  const group5 = ["k"];//5 point
+                  const group6 = ["j","x"];//8 point
+                  const group7 = ["q","z"];//10 point
+
+
+                  
+
+                  const createGroupElement = (letter,index)=>{
+                    const myDiv= document.createElement("div");
+                    myDiv.classList.add("box");
+                    myDiv.id = letter+index;
+
+
+                    const myP = document.createElement("p");
+                    myP.textContent = letter;
+                    const myCheckBox1 = document.createElement("input");
+                    myCheckBox1.type = "checkbox";
+                    myCheckBox1.name="2x";
+                    myCheckBox1.value="2x";
+                    myCheckBox1.id = letter+index;
+
+                    const label1 = document.createElement("label");
+                    label1.textContent = "2X";
+
+
+
+
+
+                    const myCheckBox2 = document.createElement("input");
+                    myCheckBox2.type = "checkbox";
+                    myCheckBox2.name="3x";
+                    myCheckBox2.value="3x";
+                    myCheckBox2.id = letter+index;
+
+                    const label2 = document.createElement("label");
+                    label2.textContent = "3X";
+
+
+                    myDiv.appendChild(myP);
+                    myDiv.appendChild(myCheckBox1);
+                    myDiv.appendChild(label1);
+
+                    myDiv.appendChild(myCheckBox2);
+                    myDiv.appendChild(label2);
+
+                    return myDiv;
+                  };
+
+                  const getWordData = ()=>{
+                          const word= document.querySelector("[name = wordInput]").value;
+                          const wordArray = [...word];
+                          const wordLength = wordArray.length;
+                          return {word, wordArray, wordLength};
+                        }
+                  const createArrayOfGroupedElement = (wordAsArray)=>{
+
+                    let elementArray =[];//used to store the create elements
+                    wordAsArray.forEach((letter,index)=>{
+                       
+                       const element = createGroupElement(letter,index);
+
+                       elementArray.push(element);
+                     })
+
+                     return elementArray;
+                  }     
+                  const printArrayOfElementsToScreen = (arrayOfElements,elementToBePutInto)=>{
+
+                     //loops throw array of elements and appends each to mainbox
+                     arrayOfElements.forEach((element,index)=>{
+                            if(index != 7){
+                              elementToBePutInto.appendChild(element);
+                            }else{
+                              const break1= document.createElement("br");
+                              const break2= document.createElement("br");
+                              const break3= document.createElement("br");
+                              elementToBePutInto.appendChild(break1);
+                              elementToBePutInto.appendChild(break2);
+                              elementToBePutInto.appendChild(break3);
+                              elementToBePutInto.appendChild(element);
+
+                            }
+                          
+                      })
+                  }
+                  
+                  const calculateTotal = (wordAsArray)=>{
+                    let score =0;
+                    wordAsArray.forEach((letter)=>{
+                      
+                      if(group1.includes(letter)){
+                        console.log(parseInt(letter));
+                        console.log(typeof letter);
+                        
+                      }
+                     
+
+                      
+                    })  
+                    return parseInt(score);
+                  }
+
+                  let processBtn = document.querySelector(".process-btn");
+           
+                  //when button is clicked run a funcion
+                  processBtn.addEventListener("click",()=>{
+                         
+                         const wordAsArray = getWordData().wordArray;
+                         console.log(calculateTotal(wordAsArray));
+                         const arrayOfGroupedElements = createArrayOfGroupedElement(wordAsArray);
+                        // console.log(calculateTotal(wordAsArray));
+                        //grab the main div and add new elements in it
+                        const mainBox = document.querySelector(".main-box");
+                
+                        printArrayOfElementsToScreen(arrayOfGroupedElements,mainBox);
+                          
+                      //  ********************************
+                      const myBtn = document.createElement("button");
+                      myBtn.textContent="calculate";
+
+                      mainBox.appendChild(myBtn);
+                  });
+                 
+
+                  /*left off on finish function calculateToal*/
+            
+      </script>
+<%- include('partials/footer') %>
