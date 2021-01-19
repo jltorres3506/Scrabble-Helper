@@ -16,39 +16,41 @@
 
       <script>
                   
-                  // Letter scores
-                  const a =1;
-                  const e =1;
-                  const i =1;
-                  const o =1;
-                  const u = 1;
-                  const l =1;
-                  const n =1;
-                  const s =1;
-                  const t=1;
-                  const r = 1;
+                  const letterPoints = {};
 
-                  const d =2;
-                  const g = 2;
+                  letterPoints["a"]=1;
+                  letterPoints["a"] =1;
+                  letterPoints["e"] =1;
+                  letterPoints["i"] =1;
+                  letterPoints["o"] =1;
+                  letterPoints["u"] = 1;
+                  letterPoints["l"] =1;
+                  letterPoints["n"] =1;
+                  letterPoints["s"] =1;
+                  letterPoints["t"]=1;
+                  letterPoints["r"] = 1;
 
-                  const b = 3
-                  const c = 3;
-                  const m = 3;
-                  const p = 3;
+                  letterPoints["d"] =2;
+                  letterPoints["g"] = 2;
 
-                  const f = 4;
-                  const h = 4
-                  const v =4;
-                  const w =4;
-                  const y =4;
+                  letterPoints["b"] = 3
+                  letterPoints["c"] = 3;
+                  letterPoints["m"] = 3;
+                  letterPoints["p"] = 3;
 
-                  const k = 5;
+                  letterPoints["f"] = 4;
+                  letterPoints["h"] = 4
+                  letterPoints["v"] =4;
+                  letterPoints["w"] =4;
+                  letterPoints["y"] =4;
 
-                  const j = 8;
-                  const x = 8;
+                  letterPoints["k"] = 5;
 
-                  const q = 10;
-                  const z = 10;
+                  letterPoints["j"] = 8;
+                  letterPoints["x"] = 8;
+
+                  letterPoints["q"] = 10;
+                  letterPoints["z"] = 10;
 
                   const group1 = ["a","e","i","o","u","l","n","s","t","r"];//1 point
                   const group2 = ["d","g"];//2 point
@@ -71,8 +73,9 @@
                     myP.textContent = letter;
                     const myCheckBox1 = document.createElement("input");
                     myCheckBox1.type = "checkbox";
-                    myCheckBox1.name="2x";
-                    myCheckBox1.value="2x";
+                    myCheckBox1.name="checkbox";
+                    myCheckBox1.value=letter+2;
+                    
                     myCheckBox1.id = letter+index;
 
                     const label1 = document.createElement("label");
@@ -84,8 +87,8 @@
 
                     const myCheckBox2 = document.createElement("input");
                     myCheckBox2.type = "checkbox";
-                    myCheckBox2.name="3x";
-                    myCheckBox2.value="3x";
+                    myCheckBox2.name="checkbox";
+                    myCheckBox2.value=letter+3;
                     myCheckBox2.id = letter+index;
 
                     const label2 = document.createElement("label");
@@ -139,20 +142,41 @@
                           
                       })
                   }
-                  
+                 
+                  const isOneOftwoBoxesChecked = (idOfElements)=>{
+                      const arrayOfCheckBoxes = document.querySelectorAll(idOfElements);//grabs all elements with specific id
+
+                      // let result = undefined;
+                       arrayOfCheckBoxes.forEach((checkBox)=>{
+
+                        console.log(checkBox);
+
+                       })
+
+                      //  return result;
+                    }
+
                   const calculateTotal = (wordAsArray)=>{
                     let score =0;
-                    wordAsArray.forEach((letter)=>{
+                    wordAsArray.forEach((letter,index)=>{
                       
-                      if(group1.includes(letter)){
-                        console.log(parseInt(letter));
-                        console.log(typeof letter);
+                      
+                      group1.includes(letter) ? score+=letterPoints[letter] : undefined;
+                      group2.includes(letter) ? score+=letterPoints[letter] : undefined;
+                      group3.includes(letter) ? score+=letterPoints[letter] : undefined;
+                      group4.includes(letter) ? score+=letterPoints[letter] : undefined;
+                      group5.includes(letter) ? score+=letterPoints[letter] : undefined;
+                      group6.includes(letter) ? score+=letterPoints[letter] : undefined;
+                      group7.includes(letter) ? score+=letterPoints[letter] : undefined;
                         
-                      }
-                     
-
-                      
+                    
                     })  
+
+                    
+                    
+                          
+
+                   
                     return parseInt(score);
                   }
 
@@ -162,7 +186,7 @@
                   processBtn.addEventListener("click",()=>{
                          
                          const wordAsArray = getWordData().wordArray;
-                         console.log(calculateTotal(wordAsArray));
+                         
                          const arrayOfGroupedElements = createArrayOfGroupedElement(wordAsArray);
                         // console.log(calculateTotal(wordAsArray));
                         //grab the main div and add new elements in it
@@ -173,12 +197,70 @@
                       //  ********************************
                       const myBtn = document.createElement("button");
                       myBtn.textContent="calculate";
-
+                      //  myBtn.name="calculateBtn";
                       mainBox.appendChild(myBtn);
+
+                      //add evenet listener to calculate button
+
+                      //should get the total of points of letters
+                      //and  the value of checkboxes and calculte that with totals
+
+                      myBtn.addEventListener("click",(event)=>{
+
+                       
+                          const checked = [];//store checked boxes here
+
+                          //find all checkboxes by name
+                          let arrayOfCheckBoxes = document.getElementsByName("checkbox");//document.querySelectorAll(`input[id = ${letter}${index}].checked`);//grabs all elements with specific id
+
+                          //loop through all boxes
+                          arrayOfCheckBoxes.forEach((checkbox)=>{
+
+
+                            if(checkbox.checked){
+                              checked.push(checkbox);
+                            }
+
+
+                          })
+
+                          const objs = [];//store objects of data from checkboxes
+
+                          checked.forEach((box)=>{
+
+                            //destrcut data from each boz into an object
+                            const [letter, multiplyer] = [...box.value];
+                            
+                            
+                            objs.push(
+                              {
+                              letter,  
+                              letterPoint:letterPoints[letter],
+                              multiplyer
+                             }
+                            )
+                           
+                          })
+
+                          let score2 = 0;
+
+                          objs.forEach((obj)=>{
+                            score2+= obj.letterPoint*obj.multiplyer
+                          })
+                          // console.log(score2);
+                          console.log(calculateTotal(wordAsArray)+score2);
+                         
+                        // get the input of check boxes by id (letter+indexOfLetter), see which is ticked if any
+                        
+
+
+                      })
+
+                      
                   });
                  
 
-                  /*left off on finish function calculateToal*/
+                  /*left off: code is working but need to refacotr better then what it is*/
             
       </script>
 <%- include('partials/footer') %>
