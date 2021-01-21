@@ -16,9 +16,11 @@
 
       <script>
                   
+              
+
                   const letterPoints = {};
 
-                  letterPoints["a"]=1;
+                  
                   letterPoints["a"] =1;
                   letterPoints["e"] =1;
                   letterPoints["i"] =1;
@@ -52,14 +54,114 @@
                   letterPoints["q"] = 10;
                   letterPoints["z"] = 10;
 
-                  const group1 = ["a","e","i","o","u","l","n","s","t","r"];//1 point
-                  const group2 = ["d","g"];//2 point
-                  const group3 = ["b","c","m","p"];//3 point
-                  const group4 = ["f","h","v","w","y"];//4 point
-                  const group5 = ["k"];//5 point
-                  const group6 = ["j","x"];//8 point
-                  const group7 = ["q","z"];//10 point
+//  ************Cleared methods
+                        const calculateTotalScore = (wordAsArray,checkBoxData)=>{
+                          let regularScore =0;
+                          let extraLetterScore =0;
+                          let indexOfLetterOfCheckedBox =[];//holds index position of letter that has extra scoring
+                          
+                          checkBoxData.forEach((checkedBox)=>{
+                            extraLetterScore+= checkedBox.letterPoint*checkedBox.multiplyer;
+                            indexOfLetterOfCheckedBox.push(parseInt(checkedBox.indexOfLetterWithExtraScore));
+                          })
+                          
+                      
+                          wordAsArray.forEach((letter,index)=>{
+                           
+                      
+                            if(!indexOfLetterOfCheckedBox.includes(index)){
+                              
+                              regularScore+=letterPoints[letter];
+                             
+                            }
 
+                          
+                          })  
+                          console.log( `extraLetterScore: ${extraLetterScore} regularLetterScore: ${regularScore}   indexOfLetter: ${indexOfLetterOfCheckedBox}`);
+                          return parseInt(regularScore+extraLetterScore);
+                        }
+
+                        const getAllCheckedBoxes = ()=>{
+                          const checked = [];//store checked boxes here
+
+                          //find all checkboxes by name
+                          let arrayOfCheckBoxes = document.getElementsByName("checkbox");
+
+                           //loop through all boxes
+                           arrayOfCheckBoxes.forEach((checkbox)=>{
+
+                              if(checkbox.checked){
+                                checked.push(checkbox);
+                              }
+
+                          })
+
+                         
+                            return checked;
+                        }
+                        const convertDataFromCheckBoxesToObjs = (checkedBoxes)=>{
+                            const objs = [];//store objects of data from checkboxes
+
+                            checkedBoxes.forEach((box)=>{
+
+                                  //destrcut data from each boz into an object
+                                  const [letter, multiplyer] = [...box.value];
+                                  const [letterInWord, indexOfLetterWithExtraScore] = [...box.id];
+
+                                 
+                                  objs.push(
+                                    {
+                                      letter,  
+                                      letterPoint:letterPoints[letter],
+                                      multiplyer,
+                                      indexOfLetterWithExtraScore//used to indicate the index of letter that has extra scoring
+                                    }
+                                  )
+
+                                  })
+
+                                  return objs;
+                        } 
+                        const getWordData = ()=>{
+                          const word= document.querySelector("[name = wordInput]").value;
+                          const wordArray = [...word];
+                          const wordLength = wordArray.length;
+                          return {word, wordArray, wordLength};
+                        }
+                        const printArrayOfElementsToScreen = (arrayOfElements,elementToBePutInto)=>{
+
+                          //loops throw array of elements and appends each to mainbox
+                          arrayOfElements.forEach((element,index)=>{
+                                if(index != 7){
+                                  elementToBePutInto.appendChild(element);
+                                }else{
+                                  const break1= document.createElement("br");
+                                  const break2= document.createElement("br");
+                                  const break3= document.createElement("br");
+                                  elementToBePutInto.appendChild(break1);
+                                  elementToBePutInto.appendChild(break2);
+                                  elementToBePutInto.appendChild(break3);
+                                  elementToBePutInto.appendChild(element);
+
+                                }
+                              
+                          })
+                        }  
+                        const isOneOftwoBoxesChecked = (idOfElements)=>{
+                          const arrayOfCheckBoxes = document.querySelectorAll(idOfElements);//grabs all elements with specific id
+
+                          // let result = undefined;
+                          arrayOfCheckBoxes.forEach((checkBox)=>{
+
+                            console.log(checkBox);
+
+                          })
+
+                          //  return result;
+                        }
+
+
+         //  ************Cleared methods 
 
                   
 
@@ -105,12 +207,7 @@
                     return myDiv;
                   };
 
-                  const getWordData = ()=>{
-                          const word= document.querySelector("[name = wordInput]").value;
-                          const wordArray = [...word];
-                          const wordLength = wordArray.length;
-                          return {word, wordArray, wordLength};
-                        }
+                  
                   const createArrayOfGroupedElement = (wordAsArray)=>{
 
                     let elementArray =[];//used to store the create elements
@@ -123,63 +220,8 @@
 
                      return elementArray;
                   }     
-                  const printArrayOfElementsToScreen = (arrayOfElements,elementToBePutInto)=>{
-
-                     //loops throw array of elements and appends each to mainbox
-                     arrayOfElements.forEach((element,index)=>{
-                            if(index != 7){
-                              elementToBePutInto.appendChild(element);
-                            }else{
-                              const break1= document.createElement("br");
-                              const break2= document.createElement("br");
-                              const break3= document.createElement("br");
-                              elementToBePutInto.appendChild(break1);
-                              elementToBePutInto.appendChild(break2);
-                              elementToBePutInto.appendChild(break3);
-                              elementToBePutInto.appendChild(element);
-
-                            }
-                          
-                      })
-                  }
                  
-                  const isOneOftwoBoxesChecked = (idOfElements)=>{
-                      const arrayOfCheckBoxes = document.querySelectorAll(idOfElements);//grabs all elements with specific id
-
-                      // let result = undefined;
-                       arrayOfCheckBoxes.forEach((checkBox)=>{
-
-                        console.log(checkBox);
-
-                       })
-
-                      //  return result;
-                    }
-
-                  const calculateTotal = (wordAsArray)=>{
-                    let score =0;
-                    wordAsArray.forEach((letter,index)=>{
-                      
-                      
-                      group1.includes(letter) ? score+=letterPoints[letter] : undefined;
-                      group2.includes(letter) ? score+=letterPoints[letter] : undefined;
-                      group3.includes(letter) ? score+=letterPoints[letter] : undefined;
-                      group4.includes(letter) ? score+=letterPoints[letter] : undefined;
-                      group5.includes(letter) ? score+=letterPoints[letter] : undefined;
-                      group6.includes(letter) ? score+=letterPoints[letter] : undefined;
-                      group7.includes(letter) ? score+=letterPoints[letter] : undefined;
-                        
-                    
-                    })  
-
-                    
-                    
-                          
-
-                   
-                    return parseInt(score);
-                  }
-
+ 
                   let processBtn = document.querySelector(".process-btn");
            
                   //when button is clicked run a funcion
@@ -188,8 +230,7 @@
                          const wordAsArray = getWordData().wordArray;
                          
                          const arrayOfGroupedElements = createArrayOfGroupedElement(wordAsArray);
-                        // console.log(calculateTotal(wordAsArray));
-                        //grab the main div and add new elements in it
+                    
                         const mainBox = document.querySelector(".main-box");
                 
                         printArrayOfElementsToScreen(arrayOfGroupedElements,mainBox);
@@ -200,67 +241,27 @@
                       //  myBtn.name="calculateBtn";
                       mainBox.appendChild(myBtn);
 
-                      //add evenet listener to calculate button
-
-                      //should get the total of points of letters
-                      //and  the value of checkboxes and calculte that with totals
 
                       myBtn.addEventListener("click",(event)=>{
 
                        
-                          const checked = [];//store checked boxes here
 
-                          //find all checkboxes by name
-                          let arrayOfCheckBoxes = document.getElementsByName("checkbox");//document.querySelectorAll(`input[id = ${letter}${index}].checked`);//grabs all elements with specific id
+                        const checkedBoxes = getAllCheckedBoxes();
 
-                          //loop through all boxes
-                          arrayOfCheckBoxes.forEach((checkbox)=>{
+                        const dataObjs = convertDataFromCheckBoxesToObjs(checkedBoxes);
 
-
-                            if(checkbox.checked){
-                              checked.push(checkbox);
-                            }
-
-
-                          })
-
-                          const objs = [];//store objects of data from checkboxes
-
-                          checked.forEach((box)=>{
-
-                            //destrcut data from each boz into an object
-                            const [letter, multiplyer] = [...box.value];
-                            
-                            
-                            objs.push(
-                              {
-                              letter,  
-                              letterPoint:letterPoints[letter],
-                              multiplyer
-                             }
-                            )
-                           
-                          })
-
-                          let score2 = 0;
-
-                          objs.forEach((obj)=>{
-                            score2+= obj.letterPoint*obj.multiplyer
-                          })
-                          // console.log(score2);
-                          console.log(calculateTotal(wordAsArray)+score2);
-                         
-                        // get the input of check boxes by id (letter+indexOfLetter), see which is ticked if any
-                        
-
-
+                        console.log(calculateTotalScore(wordAsArray,dataObjs));
                       })
 
                       
                   });
                  
+                 
 
-                  /*left off: code is working but need to refacotr better then what it is*/
+                  /*Left of on the following need to add
+                  -double word score
+                  -triple word score
+                  -Bingo 50 points for using all 7 tiles "SEE IF THIS IS A REAL THING IN ACTUAL GAME"*/
             
       </script>
 <%- include('partials/footer') %>
