@@ -16,6 +16,9 @@
 
       <script>
                   
+                  window.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+
               
 
                   const letterPoints = {};
@@ -54,7 +57,29 @@
                   letterPoints["q"] = 10;
                   letterPoints["z"] = 10;
 
-//  ************Cleared methods
+                        /*Left of on the following need to add
+                  */
+                        // create function that checks to see if any of the 3 checkboxes is checked
+                        //for 2x word, 3x word or bingo
+                        const getDoubleWordCheckBox = ()=>{
+
+                          return document.querySelector("[name = doubleWordCheckbox]");
+                          
+                        }
+                        const getTripleWordCheckBox = ()=>{
+
+                          return document.querySelector("[name = tripleWordCheckbox]");
+
+                          
+
+                        }
+                        const getBingoCheckBox = ()=>{
+
+                          return document.querySelector("[name = bingoCheckbox]");
+
+                            
+
+                        }
                         const calculateTotalScore = (wordAsArray,checkBoxData)=>{
                           let regularScore =0;
                           let extraLetterScore =0;
@@ -78,10 +103,11 @@
                           
                           })  
                           console.log( `extraLetterScore: ${extraLetterScore} regularLetterScore: ${regularScore}   indexOfLetter: ${indexOfLetterOfCheckedBox}`);
+                          
                           return parseInt(regularScore+extraLetterScore);
                         }
 
-                        const getAllCheckedBoxes = ()=>{
+                        const getAllCheckedBoxesIntoArray = ()=>{
                           const checked = [];//store checked boxes here
 
                           //find all checkboxes by name
@@ -99,17 +125,18 @@
                          
                             return checked;
                         }
-                        const convertDataFromCheckBoxesToObjs = (checkedBoxes)=>{
-                            const objs = [];//store objects of data from checkboxes
+                        
+                        const getDesiredDataFromCheckBoxsAsArrayOfObjects = (arrayOfcheckedBoxes)=>{
+                            const dataObjects = [];//store objects of data from checkboxes
 
-                            checkedBoxes.forEach((box)=>{
+                            arrayOfcheckedBoxes.forEach((box)=>{
 
                                   //destrcut data from each boz into an object
                                   const [letter, multiplyer] = [...box.value];
                                   const [letterInWord, indexOfLetterWithExtraScore] = [...box.id];
 
                                  
-                                  objs.push(
+                                  dataObjects.push(
                                     {
                                       letter,  
                                       letterPoint:letterPoints[letter],
@@ -120,148 +147,278 @@
 
                                   })
 
-                                  return objs;
+                                  return dataObjects;
                         } 
-                        const getWordData = ()=>{
-                          const word= document.querySelector("[name = wordInput]").value;
-                          const wordArray = [...word];
-                          const wordLength = wordArray.length;
-                          return {word, wordArray, wordLength};
-                        }
-                        const printArrayOfElementsToScreen = (arrayOfElements,elementToBePutInto)=>{
 
-                          //loops throw array of elements and appends each to mainbox
+                        const printArrayOfTilesInMainContainer = (arrayOfElements,parentElement)=>{
+
+                          //loops throw array of elements and appends each to mainContainer
                           arrayOfElements.forEach((element,index)=>{
                                 if(index != 7){
-                                  elementToBePutInto.appendChild(element);
+                                  parentElement.appendChild(element);
                                 }else{
                                   const break1= document.createElement("br");
                                   const break2= document.createElement("br");
                                   const break3= document.createElement("br");
-                                  elementToBePutInto.appendChild(break1);
-                                  elementToBePutInto.appendChild(break2);
-                                  elementToBePutInto.appendChild(break3);
-                                  elementToBePutInto.appendChild(element);
+                                  parentElement.appendChild(break1);
+                                  parentElement.appendChild(break2);
+                                  parentElement.appendChild(break3);
+                                  parentElement.appendChild(element);
 
                                 }
                               
                           })
                         }  
-                        const isOneOftwoBoxesChecked = (idOfElements)=>{
-                          const arrayOfCheckBoxes = document.querySelectorAll(idOfElements);//grabs all elements with specific id
+                        
+                      
 
-                          // let result = undefined;
-                          arrayOfCheckBoxes.forEach((checkBox)=>{
-
-                            console.log(checkBox);
-
-                          })
-
-                          //  return result;
-                        }
+                       const createTile = (letter,index)=>{
+                    const containerDiv= document.createElement("div");
+                    containerDiv.classList.add("box");
+                    containerDiv.id = letter+index;
 
 
-         //  ************Cleared methods 
+                    const letterHolderP = document.createElement("p");
+                    letterHolderP.textContent = letter;
 
-                  
+                    const checkBox2X = document.createElement("input");
+                    checkBox2X.type = "checkbox";
+                    checkBox2X.name="checkbox";
+                    checkBox2X.value=letter+2;
+                    checkBox2X.id = letter+index;
 
-                  const createGroupElement = (letter,index)=>{
-                    const myDiv= document.createElement("div");
-                    myDiv.classList.add("box");
-                    myDiv.id = letter+index;
-
-
-                    const myP = document.createElement("p");
-                    myP.textContent = letter;
-                    const myCheckBox1 = document.createElement("input");
-                    myCheckBox1.type = "checkbox";
-                    myCheckBox1.name="checkbox";
-                    myCheckBox1.value=letter+2;
-                    
-                    myCheckBox1.id = letter+index;
-
-                    const label1 = document.createElement("label");
-                    label1.textContent = "2X";
+                    const labelFor2XCheckBox = document.createElement("label");
+                    labelFor2XCheckBox.textContent = "2X";
 
 
+                    const checkBox3X = document.createElement("input");
+                    checkBox3X.type = "checkbox";
+                    checkBox3X.name="checkbox";
+                    checkBox3X.value=letter+3;
+                    checkBox3X.id = letter+index;
 
+                    const labelFor3XCheckBox = document.createElement("label");
+                    labelFor3XCheckBox.textContent = "3X";
 
+                    // add the elements to the container div
+                    containerDiv.appendChild(letterHolderP);
+                    containerDiv.appendChild(checkBox2X);
+                    containerDiv.appendChild(labelFor2XCheckBox);
+                    containerDiv.appendChild(checkBox3X);
+                    containerDiv.appendChild(labelFor3XCheckBox);
 
-                    const myCheckBox2 = document.createElement("input");
-                    myCheckBox2.type = "checkbox";
-                    myCheckBox2.name="checkbox";
-                    myCheckBox2.value=letter+3;
-                    myCheckBox2.id = letter+index;
-
-                    const label2 = document.createElement("label");
-                    label2.textContent = "3X";
-
-
-                    myDiv.appendChild(myP);
-                    myDiv.appendChild(myCheckBox1);
-                    myDiv.appendChild(label1);
-
-                    myDiv.appendChild(myCheckBox2);
-                    myDiv.appendChild(label2);
-
-                    return myDiv;
+                    return containerDiv;
                   };
 
                   
-                  const createArrayOfGroupedElement = (wordAsArray)=>{
-
-                    let elementArray =[];//used to store the create elements
-                    wordAsArray.forEach((letter,index)=>{
-                       
-                       const element = createGroupElement(letter,index);
-
-                       elementArray.push(element);
-                     })
-
-                     return elementArray;
-                  }     
+                      
                  
  
                   let processBtn = document.querySelector(".process-btn");
            
+
+                  const getWordAsArrayOfChars = ()=>{
+                          const word= document.querySelector("[name = wordInput]").value;
+                          const wordArray = [...word];
+                          return wordArray;
+                        }
+                 
+                  const createArrayOfTiles = (wordAsArray)=>{
+
+                          let tileArray =[];//used to store the created tiles
+                          wordAsArray.forEach((letter,index)=>{
+                            
+                            const tile = createTile(letter,index);
+
+                            tileArray.push(tile);
+                          })
+
+                          return tileArray;
+                  } 
+                  const verifyWhichOfThreeBoxesIsCheckedAndDisableOther =(e)=>{
+
+                      if(e.target.name === "doubleWordCheckbox" ){
+                            if(e.target.checked){
+                                  getTripleWordCheckBox().disabled= true;
+                                  
+                            }else{
+                                  getTripleWordCheckBox().disabled= false;
+                                  
+                            }
+                      }else if(e.target.name === "tripleWordCheckbox" ){
+                            if(e.target.checked){
+                                  getDoubleWordCheckBox().disabled= true;
+                                  
+                            }else{
+                                  getDoubleWordCheckBox().disabled= false;
+                                  
+                            }
+                      }
+                      
+                      
+                  }
+                  const createDoubleWordCheckbox = ()=>{
+
+                    const containerDiv= document.createElement("div");
+                    containerDiv.classList.add("checkbox");
+                    // containerDiv.id = letter+index;
+
+                    const doubleWordCheckBox = document.createElement("input");
+                    doubleWordCheckBox.type = "checkbox";
+                    doubleWordCheckBox.name="doubleWordCheckbox";
+                  
+                    doubleWordCheckBox.value=2;
+                    doubleWordCheckBox.addEventListener("change",(e)=>{
+
+                      verifyWhichOfThreeBoxesIsCheckedAndDisableOther(e);
+ 
+                    })
+                    // doubleWordCheckBox.id = letter+index;
+
+                    const doubleWordLabel = document.createElement("label");
+                    
+                    doubleWordLabel.textContent = "Double Word";
+
+                    containerDiv.appendChild(doubleWordCheckBox);
+                    containerDiv.appendChild(doubleWordLabel);
+                    
+                    
+
+                    return containerDiv;
+                  }
                   //when button is clicked run a funcion
+                  
+                  const createTripleWordCheckbox = ()=>{
+
+                      const containerDiv= document.createElement("div");
+                      containerDiv.classList.add("checkbox");
+                      // containerDiv.id = letter+index;
+
+                      const tripleWordCheckBox = document.createElement("input");
+                      tripleWordCheckBox.type = "checkbox";
+                      tripleWordCheckBox.name="tripleWordCheckbox";
+
+                      tripleWordCheckBox.value=3;
+                      tripleWordCheckBox.addEventListener("change",(e)=>{
+
+                        verifyWhichOfThreeBoxesIsCheckedAndDisableOther(e);
+
+                      })
+                      
+                      const tripleWordLabel = document.createElement("label");
+
+                      tripleWordLabel.textContent = "Triple Word";
+
+                      containerDiv.appendChild(tripleWordCheckBox);
+                      containerDiv.appendChild(tripleWordLabel);
+                      
+
+
+                      return containerDiv;
+                  }
+                  
+                  
+                  const createBingoCheckbox = ()=>{
+
+                      const containerDiv= document.createElement("div");
+                      containerDiv.classList.add("checkbox");
+                      // containerDiv.id = letter+index;
+
+                      const bingoCheckBox = document.createElement("input");
+                      bingoCheckBox.type = "checkbox";
+                      bingoCheckBox.name="bingoCheckbox";
+
+                      bingoCheckBox.value=50;
+                      bingoCheckBox.addEventListener("change",(e)=>{
+
+                        verifyWhichOfThreeBoxesIsCheckedAndDisableOther(e);
+
+                      })
+
+                      const bingoWordLabel = document.createElement("label");
+
+                      bingoWordLabel.textContent = "Bingo";
+
+                      containerDiv.appendChild(bingoCheckBox);
+                      containerDiv.appendChild(bingoWordLabel);
+
+
+
+                      return containerDiv;
+                  }
                   processBtn.addEventListener("click",()=>{
                          
-                         const wordAsArray = getWordData().wordArray;
-                         
-                         const arrayOfGroupedElements = createArrayOfGroupedElement(wordAsArray);
+                        const arrayOfTiles = createArrayOfTiles(getWordAsArrayOfChars());
                     
-                        const mainBox = document.querySelector(".main-box");
+                        const mainContainer = document.querySelector(".main-box");
                 
-                        printArrayOfElementsToScreen(arrayOfGroupedElements,mainBox);
+                        printArrayOfTilesInMainContainer(arrayOfTiles,mainContainer);
+                        
+                      
+                      const calculateBtn = document.createElement("button");
+                      calculateBtn.textContent="calculate";
+                     
+                      mainContainer.appendChild(createDoubleWordCheckbox());
+                      mainContainer.appendChild(createTripleWordCheckbox());
+                      mainContainer.appendChild(createBingoCheckbox());
+                      
+
+                      mainContainer.appendChild(calculateBtn);
+
+
+                      
+                 
+                      calculateBtn.addEventListener("click",(event)=>{
+
+                        const returnCheckedBoxForSpecialWordScoring = ()=>{
+                          const doubleWord = getDoubleWordCheckBox();
+                          const tripleWord = getTripleWordCheckBox();
+                          const bingo = getBingoCheckBox();
+                          // let result = undefined;
+
+                          if(doubleWord.checked){
+                            // result= doubleWord.value;
+                            return doubleWord;
+                          }
+                          if(tripleWord.checked){
+                            // result= doubleWord.value;
+                            return tripleWord;
+                          }
+                          if(bingo.checked){
+                            // result= doubleWord.value;
+                            return bingo;
+                          }
+
+
                           
-                      //  ********************************
-                      const myBtn = document.createElement("button");
-                      myBtn.textContent="calculate";
-                      //  myBtn.name="calculateBtn";
-                      mainBox.appendChild(myBtn);
-
-
-                      myBtn.addEventListener("click",(event)=>{
+                        }
 
                        
+                        const checkedBoxes = getAllCheckedBoxesIntoArray();
 
-                        const checkedBoxes = getAllCheckedBoxes();
+                        const dataObjects = getDesiredDataFromCheckBoxsAsArrayOfObjects(checkedBoxes);
+                        
+                     //  ##########might need to be put in a funtion
+                        let basicScore = calculateTotalScore(getWordAsArrayOfChars(),dataObjects);
+                        const checkbox = returnCheckedBoxForSpecialWordScoring();
+                       console.log(basicScore);
+                        if(checkbox.name == "bingoCheckbox"){
+                           basicScore+= parseInt(checkbox.value);
+                            
+                        }
+                        console.log("new "+basicScore);
 
-                        const dataObjs = convertDataFromCheckBoxesToObjs(checkedBoxes);
-
-                        console.log(calculateTotalScore(wordAsArray,dataObjs));
+                    //  ##########might need to be put in a funtion
+                        
                       })
 
                       
                   });
                  
-                 
+                    
+                  
 
-                  /*Left of on the following need to add
-                  -double word score
-                  -triple word score
-                  -Bingo 50 points for using all 7 tiles "SEE IF THIS IS A REAL THING IN ACTUAL GAME"*/
+                });
             
       </script>
 <%- include('partials/footer') %>

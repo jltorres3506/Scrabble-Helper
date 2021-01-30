@@ -37,17 +37,7 @@
       font-size: 16px;
 }
 
-.box2{
-      display: inline-block;
-      border: 2px solid black;
-      margin: 5px;
-      width: 45px;
-      height: 50%;
-      text-align: center;
-      vertical-align: baseline;
-      font-size: 16px;
-}
-.fill{
-      background-color: green;
+.inline{
+    display: inline-block;  
 }
 
