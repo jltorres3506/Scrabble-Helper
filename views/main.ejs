@@ -80,32 +80,7 @@
                             
 
                         }
-                        const calculateTotalScore = (wordAsArray,checkBoxData)=>{
-                          let regularScore =0;
-                          let extraLetterScore =0;
-                          let indexOfLetterOfCheckedBox =[];//holds index position of letter that has extra scoring
-                          
-                          checkBoxData.forEach((checkedBox)=>{
-                            extraLetterScore+= checkedBox.letterPoint*checkedBox.multiplyer;
-                            indexOfLetterOfCheckedBox.push(parseInt(checkedBox.indexOfLetterWithExtraScore));
-                          })
-                          
-                      
-                          wordAsArray.forEach((letter,index)=>{
-                           
-                      
-                            if(!indexOfLetterOfCheckedBox.includes(index)){
-                              
-                              regularScore+=letterPoints[letter];
-                             
-                            }
-
-                          
-                          })  
-                          console.log( `extraLetterScore: ${extraLetterScore} regularLetterScore: ${regularScore}   indexOfLetter: ${indexOfLetterOfCheckedBox}`);
-                          
-                          return parseInt(regularScore+extraLetterScore);
-                        }
+                        
 
                         const getAllCheckedBoxesIntoArray = ()=>{
                           const checked = [];//store checked boxes here
@@ -365,59 +340,87 @@
 
                       mainContainer.appendChild(calculateBtn);
 
-
-                      
-                 
                       calculateBtn.addEventListener("click",(event)=>{
+                          const dataObjects = getDesiredDataFromCheckBoxsAsArrayOfObjects(getAllCheckedBoxesIntoArray());
+                          const getIndexOfLetterOfCheckedBox = (checkBoxData)=>{
+                            let indexOfLetterOfCheckedBox =[];
+                            checkBoxData.forEach((checkedBox)=>{
+                            indexOfLetterOfCheckedBox.push(parseInt(checkedBox.indexOfLetterWithExtraScore));
+                            })
+                            return indexOfLetterOfCheckedBox;
+                          };
+                          const getSpecialLetterScore = (checkBoxData)=>{
+                            let specialLetterScore =0;
 
-                        const returnCheckedBoxForSpecialWordScoring = ()=>{
-                          const doubleWord = getDoubleWordCheckBox();
-                          const tripleWord = getTripleWordCheckBox();
+                            checkBoxData.forEach((checkedBox)=>{
+                            specialLetterScore+= checkedBox.letterPoint*checkedBox.multiplyer;
+                        
+                          })
+
+                          return specialLetterScore;
+                          }
+                          const getRegularLetterScore = (wordAsArray)=>{
+                            const indexOfLetterOfCheckedBox = getIndexOfLetterOfCheckedBox(dataObjects);
+                            let regularLetterScore = 0;
+                                wordAsArray.forEach((letter,index)=>{
+                              
+                              if(!indexOfLetterOfCheckedBox.includes(index)){
+                                
+                                regularLetterScore+=letterPoints[letter];
+                                
+                              }
+
+                            })
+
+                            return regularLetterScore;
+                          }
+                          const checkIfBingoIsChecked = ()=>{
                           const bingo = getBingoCheckBox();
-                          // let result = undefined;
-
-                          if(doubleWord.checked){
-                            // result= doubleWord.value;
-                            return doubleWord;
-                          }
-                          if(tripleWord.checked){
-                            // result= doubleWord.value;
-                            return tripleWord;
-                          }
                           if(bingo.checked){
                             // result= doubleWord.value;
                             return bingo;
                           }
-
-
+                        }
+                          const returnCheckedBoxForSpecialWordScoring = ()=>{
+                            const doubleWord = getDoubleWordCheckBox();
+                            const tripleWord = getTripleWordCheckBox();
                           
-                        }
+                          
 
-                       
-                        const checkedBoxes = getAllCheckedBoxesIntoArray();
-
-                        const dataObjects = getDesiredDataFromCheckBoxsAsArrayOfObjects(checkedBoxes);
-                        
-                     //  ##########might need to be put in a funtion
-                        let basicScore = calculateTotalScore(getWordAsArrayOfChars(),dataObjects);
-                        const checkbox = returnCheckedBoxForSpecialWordScoring();
-                       console.log(basicScore);
-                        if(checkbox.name == "bingoCheckbox"){
-                           basicScore+= parseInt(checkbox.value);
+                          if(doubleWord.checked){
                             
-                        }
-                        console.log("new "+basicScore);
+                            return doubleWord;
+                          }
+                          if(tripleWord.checked){
+                            
+                            return tripleWord;
+                          }
+                          
 
-                    //  ##########might need to be put in a funtion
-                        
+                        }
+                          const getTotalScore = ()=>{
+                            let basicScore = getRegularLetterScore(getWordAsArrayOfChars()) + getSpecialLetterScore(dataObjects);
+                            const checkbox = returnCheckedBoxForSpecialWordScoring();
+      
+                            checkbox.name == "doubleWordCheckbox" || checkbox.name == "tripleWordCheckbox"  ?  basicScore*=  parseInt(checkbox.value) : undefined;
+                          
+                            checkIfBingoIsChecked() ? basicScore+= parseInt(checkIfBingoIsChecked().value) : undefined;
+
+                            return basicScore;
+
+                          }
+                          
+
+                          console.log(`specialLetterScore: ${getSpecialLetterScore(dataObjects)}`);
+                          console.log(`regularLetterScore: ${getRegularLetterScore(getWordAsArrayOfChars())} `)
+                          console.log(`indexOfLetter: ${getIndexOfLetterOfCheckedBox(dataObjects)}`)
+                          console.log("Total Score: "+getTotalScore());
+
                       })
 
                       
                   });
-                 
-                    
-                  
-
+ 
                 });
             
       </script>
