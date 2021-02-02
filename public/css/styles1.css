@@ -20,22 +20,91 @@
 
 }
 
-/* .b-red, .b-black, .b-green, .b-yellow{
-      background-color: gray;
-      
-} */
 
-
+.main-box{
+      background-color: #AD9476;
+      border: 5px solid #65352D;
+      border-radius: 10px;
+      width: 412px;
+      padding-top: 20px;
+}
 .box{
       display: inline-block;
-      border: 2px solid black;
+      border: 2px solid #FCE9C1;
+      
       margin: 5px;
-      width: 45px;
+      width: 47px;
       height: 50%;
       text-align: center;
       vertical-align: baseline;
       font-size: 16px;
+      background-color: #FCE9C1;
 }
+
+.box p{
+      font-weight: bolder;
+}
+
+/* checkboxes inside of letter tiles */
+.box input[type = checkbox]{
+     margin-right: 5px; 
+     /* transform: scale(.75); */
+     
+}
+
+/* 3 checkboxes that hold double, triple word and bingo */
+.checkbox input[type=checkbox]{
+      margin-left: 5px;
+      margin-right: 5px;
+      /* margin-top: 20px; */
+}
+
+.doubleWordContainer{
+      margin-top: 20px;
+}
+
+
+/* calculate button */
+.calculateBtn{
+      margin-left: 5px;
+      margin-top: 10px;
+      background-color: #4399AE;
+      border-color: #4399AE;
+      margin-bottom: 10px;
+}
+
+.calculateBtn:hover{
+      background-color: #4399AE;
+      border-color: #4399AE;
+      color: black;
+}
+
+
+
+/* reset button */
+.resetBtn{
+     position: relative;
+     left: 235px;
+     background-color: #F5BBAD;
+     border-color: #F5BBAD;
+     margin-bottom: 10px;
+     margin-top: 10px;
+}
+
+.resetBtn:hover{
+      background-color: #F5BBAD;
+     border-color: #F5BBAD;
+     color: black;
+}
+
+
+.specialLetterScoreP, .regularLetterScoreP, .totalScoreP{
+      margin-left: 5px;
+}
+.specialLetterScoreP{
+     
+}
+
 
 .inline{
     display: inline-block;  

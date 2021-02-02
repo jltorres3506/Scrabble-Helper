@@ -1,5 +1,5 @@
 <%- include('partials/header') %>
-   
+   <h1>Scrabble Helper</h1>
         
             <input type="text" name="wordInput" placeholder="type in word here">
             <button class="process-btn">Process</button>
@@ -17,45 +17,45 @@
       <script>
                   
                   window.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM fully loaded and parsed');
+    
 
               
 
                   const letterPoints = {};
 
                   
-                  letterPoints["a"] =1;
-                  letterPoints["e"] =1;
-                  letterPoints["i"] =1;
-                  letterPoints["o"] =1;
-                  letterPoints["u"] = 1;
-                  letterPoints["l"] =1;
-                  letterPoints["n"] =1;
-                  letterPoints["s"] =1;
-                  letterPoints["t"]=1;
-                  letterPoints["r"] = 1;
+                  letterPoints["A"] =1;
+                  letterPoints["E"] =1;
+                  letterPoints["I"] =1;
+                  letterPoints["O"] =1;
+                  letterPoints["U"] = 1;
+                  letterPoints["L"] =1;
+                  letterPoints["N"] =1;
+                  letterPoints["S"] =1;
+                  letterPoints["T"]=1;
+                  letterPoints["R"] = 1;
 
-                  letterPoints["d"] =2;
-                  letterPoints["g"] = 2;
+                  letterPoints["D"] =2;
+                  letterPoints["G"] = 2;
 
-                  letterPoints["b"] = 3
-                  letterPoints["c"] = 3;
-                  letterPoints["m"] = 3;
-                  letterPoints["p"] = 3;
+                  letterPoints["B"] = 3
+                  letterPoints["C"] = 3;
+                  letterPoints["M"] = 3;
+                  letterPoints["P"] = 3;
 
-                  letterPoints["f"] = 4;
-                  letterPoints["h"] = 4
-                  letterPoints["v"] =4;
-                  letterPoints["w"] =4;
-                  letterPoints["y"] =4;
+                  letterPoints["F"] = 4;
+                  letterPoints["H"] = 4
+                  letterPoints["V"] =4;
+                  letterPoints["W"] =4;
+                  letterPoints["Y"] =4;
 
-                  letterPoints["k"] = 5;
+                  letterPoints["K"] = 5;
 
-                  letterPoints["j"] = 8;
-                  letterPoints["x"] = 8;
+                  letterPoints["J"] = 8;
+                  letterPoints["X"] = 8;
 
-                  letterPoints["q"] = 10;
-                  letterPoints["z"] = 10;
+                  letterPoints["Q"] = 10;
+                  letterPoints["Z"] = 10;
 
                         /*Left of on the following need to add
                   */
@@ -92,6 +92,7 @@
                            arrayOfCheckBoxes.forEach((checkbox)=>{
 
                               if(checkbox.checked){
+                                
                                 checked.push(checkbox);
                               }
 
@@ -105,12 +106,12 @@
                             const dataObjects = [];//store objects of data from checkboxes
 
                             arrayOfcheckedBoxes.forEach((box)=>{
-
+                                  
                                   //destrcut data from each boz into an object
                                   const [letter, multiplyer] = [...box.value];
                                   const [letterInWord, indexOfLetterWithExtraScore] = [...box.id];
-
                                  
+                               
                                   dataObjects.push(
                                     {
                                       letter,  
@@ -121,7 +122,7 @@
                                   )
 
                                   })
-
+                                  
                                   return dataObjects;
                         } 
 
@@ -185,15 +186,12 @@
                     return containerDiv;
                   };
 
-                  
-                      
-                 
- 
+
                   let processBtn = document.querySelector(".process-btn");
            
 
                   const getWordAsArrayOfChars = ()=>{
-                          const word= document.querySelector("[name = wordInput]").value;
+                          const word= document.querySelector("[name = wordInput]").value.toUpperCase();
                           const wordArray = [...word];
                           return wordArray;
                         }
@@ -236,7 +234,8 @@
 
                     const containerDiv= document.createElement("div");
                     containerDiv.classList.add("checkbox");
-                    // containerDiv.id = letter+index;
+                    containerDiv.classList.add("doubleWordContainer");
+                  
 
                     const doubleWordCheckBox = document.createElement("input");
                     doubleWordCheckBox.type = "checkbox";
@@ -297,7 +296,7 @@
 
                       const containerDiv= document.createElement("div");
                       containerDiv.classList.add("checkbox");
-                      // containerDiv.id = letter+index;
+                      
 
                       const bingoCheckBox = document.createElement("input");
                       bingoCheckBox.type = "checkbox";
@@ -321,27 +320,56 @@
 
                       return containerDiv;
                   }
-                  processBtn.addEventListener("click",()=>{
+                  
+                  processBtn.addEventListener("click",(e)=>{
                          
-                        const arrayOfTiles = createArrayOfTiles(getWordAsArrayOfChars());
+                         //make process btn invisible when clicked
+                          e.target.style.visibility = "hidden";
+                         const arrayOfTiles = createArrayOfTiles(getWordAsArrayOfChars());
                     
                         const mainContainer = document.querySelector(".main-box");
+                        mainContainer.classList.add("b-red");
                 
                         printArrayOfTilesInMainContainer(arrayOfTiles,mainContainer);
                         
-                      
+                      // CALCULATE BTN
                       const calculateBtn = document.createElement("button");
-                      calculateBtn.textContent="calculate";
+                      calculateBtn.textContent="Calculate";
+                      calculateBtn.classList.add("calculateBtn");
+                      calculateBtn.classList.add("btn");
+                      calculateBtn.classList.add("btn-primary");
+                    
+                      // RESET BTN
+                      const resetBtn = document.createElement("button");
+                      resetBtn.textContent="Reset";
+                      resetBtn.classList.add("resetBtn");
+                      resetBtn.classList.add("btn");
+                      resetBtn.classList.add("btn-primary");
+
+                      // special letter score element
+                      const specialLetterScoreP = document.createElement("p");//elements used for showing score
+                      specialLetterScoreP.classList.add("specialLetterScoreP");
+
+                      // regular letter score element
+                      const regularLetterScoreP = document.createElement("p");
+                      regularLetterScoreP.classList.add("regularLetterScoreP");
+
+                     // totral letter score element
+                      const totalScoreP = document.createElement("p");
+                      totalScoreP.classList.add("totalScoreP");
                      
                       mainContainer.appendChild(createDoubleWordCheckbox());
                       mainContainer.appendChild(createTripleWordCheckbox());
                       mainContainer.appendChild(createBingoCheckbox());
                       
-
                       mainContainer.appendChild(calculateBtn);
+                      mainContainer.appendChild(resetBtn);
+
+
 
                       calculateBtn.addEventListener("click",(event)=>{
                           const dataObjects = getDesiredDataFromCheckBoxsAsArrayOfObjects(getAllCheckedBoxesIntoArray());
+                         
                           const getIndexOfLetterOfCheckedBox = (checkBoxData)=>{
                             let indexOfLetterOfCheckedBox =[];
                             checkBoxData.forEach((checkedBox)=>{
@@ -352,9 +380,12 @@
                           const getSpecialLetterScore = (checkBoxData)=>{
                             let specialLetterScore =0;
 
+                            
                             checkBoxData.forEach((checkedBox)=>{
+                           
                             specialLetterScore+= checkedBox.letterPoint*checkedBox.multiplyer;
-                        
+                              
+                            
                           })
 
                           return specialLetterScore;
@@ -367,11 +398,11 @@
                               if(!indexOfLetterOfCheckedBox.includes(index)){
                                 
                                 regularLetterScore+=letterPoints[letter];
-                                
+                               
                               }
 
                             })
-
+                        
                             return regularLetterScore;
                           }
                           const checkIfBingoIsChecked = ()=>{
@@ -395,14 +426,22 @@
                             
                             return tripleWord;
                           }
+
+                          return false;
                           
 
                         }
                           const getTotalScore = ()=>{
                             let basicScore = getRegularLetterScore(getWordAsArrayOfChars()) + getSpecialLetterScore(dataObjects);
                             const checkbox = returnCheckedBoxForSpecialWordScoring();
-      
+                            
+                           
+                            if(!checkbox == false){
                             checkbox.name == "doubleWordCheckbox" || checkbox.name == "tripleWordCheckbox"  ?  basicScore*=  parseInt(checkbox.value) : undefined;
+
+                            }  
+
+                         
                           
                             checkIfBingoIsChecked() ? basicScore+= parseInt(checkIfBingoIsChecked().value) : undefined;
 
@@ -416,12 +455,29 @@
                           console.log(`indexOfLetter: ${getIndexOfLetterOfCheckedBox(dataObjects)}`)
                           console.log("Total Score: "+getTotalScore());
 
+                          specialLetterScoreP.textContent=`Total Letter Multiplyer Score: ${getSpecialLetterScore(dataObjects)}`;
+                          regularLetterScoreP.textContent= `Regular Letter Score: ${getRegularLetterScore(getWordAsArrayOfChars())}`;
+                          totalScoreP.textContent=`Total Score: ${getTotalScore()}`;
+                          
+
+                          mainContainer.appendChild(specialLetterScoreP);
+                          mainContainer.appendChild(regularLetterScoreP);
+                          mainContainer.appendChild(totalScoreP);
+
                       })
 
                       
+                      
+                      
+
+                      resetBtn.addEventListener("click",()=>{
+                        window.location.reload()
+                      })
                   });
  
                 });
-            
+            // LEFT OFF ON THE FOLLOWING
+            //-make all letters Uppercase
+            //-start adding styles to it!!!
       </script>
 <%- include('partials/footer') %>
