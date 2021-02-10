@@ -16,13 +16,12 @@ app.get("/",(req,res)=>{
 
 });
 
-app.get("/test",(req,res)=>{
-  
-  
+
+
+
+app.all("*",(req,res)=>{
+  res.redirect("/");
 });
-
-
-
 
 let port = process.env.PORT;
 if (port == null || port == "") {
