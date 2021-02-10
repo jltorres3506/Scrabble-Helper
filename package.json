@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+
+ "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
@@ -16,9 +21,7 @@
     "jest": "^26.6.3"
     
   },
-  "scripts": {
-    "test": "jest "
-  },
+  
   "author": "",
   "license": "ISC"
 }
