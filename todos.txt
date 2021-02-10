@@ -1,0 +1,5 @@
+
+
+- left off: line 412 need to now get regular letter score and combine with current and refactor code
+
+-cover all urls so there can be no hacking

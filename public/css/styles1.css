@@ -26,8 +26,39 @@
       border: 5px solid #65352D;
       border-radius: 10px;
       width: 412px;
-      padding-top: 20px;
+      padding-bottom: 15px;
+      margin-top: 15px;
+      margin-left: 15px;
+      
 }
+
+.title{
+      margin-bottom: 30px;
+      margin-left: 5px;
+}
+
+/* input box for word */
+input[name= wordInput]{
+      width: 200px;
+      margin-left: 5px;
+      
+      
+}
+
+.word-input-container{
+      margin-bottom: 10px;
+}
+
+/* process button */
+
+.process-btn{
+      margin-left: 5px;
+}
+
+.process-btn:hover{
+     color:black;
+}
+
 .box{
       display: inline-block;
       border: 2px solid #FCE9C1;
@@ -101,9 +132,8 @@
 .specialLetterScoreP, .regularLetterScoreP, .totalScoreP{
       margin-left: 5px;
 }
-.specialLetterScoreP{
-     
-}
+
+
 
 
 .inline{

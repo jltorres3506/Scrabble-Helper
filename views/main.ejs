@@ -1,29 +1,25 @@
 <%- include('partials/header') %>
-   <h1>Scrabble Helper</h1>
-        
-            <input type="text" name="wordInput" placeholder="type in word here">
-            <button class="process-btn">Process</button>
-            <br>
-            <br>
+   
               
             
            
       
       
       <div class="main-box">
-
+            <h1 class="title">Scrabble Helper</h1>
+            <div class="form-inline word-input-container">
+              <input class="form-control" type="text" name="wordInput" placeholder="type in word here">
+              <button class="btn btn-primary process-btn">Process</button>
+            </div>
+            
+         
       </div>
 
       <script>
                   
                   window.addEventListener('DOMContentLoaded', (event) => {
-    
-
-              
-
                   const letterPoints = {};
 
-                  
                   letterPoints["A"] =1;
                   letterPoints["E"] =1;
                   letterPoints["I"] =1;
@@ -57,76 +53,75 @@
                   letterPoints["Q"] = 10;
                   letterPoints["Z"] = 10;
 
-                        /*Left of on the following need to add
-                  */
-                        // create function that checks to see if any of the 3 checkboxes is checked
-                        //for 2x word, 3x word or bingo
-                        const getDoubleWordCheckBox = ()=>{
+                  const getDoubleWordCheckBox = ()=>{
 
                           return document.querySelector("[name = doubleWordCheckbox]");
                           
                         }
-                        const getTripleWordCheckBox = ()=>{
+                  const getTripleWordCheckBox = ()=>{
 
                           return document.querySelector("[name = tripleWordCheckbox]");
 
                           
 
                         }
-                        const getBingoCheckBox = ()=>{
+                  const getBingoCheckBox = ()=>{
 
                           return document.querySelector("[name = bingoCheckbox]");
 
                             
 
                         }
-                        
+                                    
+                  const getAllCheckboxesIntoArray = ()=>{
+                          // const checked = [];//store checked boxes here
 
-                        const getAllCheckedBoxesIntoArray = ()=>{
-                          const checked = [];//store checked boxes here
-
-                          //find all checkboxes by name
-                          let arrayOfCheckBoxes = document.getElementsByName("checkbox");
-
-                           //loop through all boxes
-                           arrayOfCheckBoxes.forEach((checkbox)=>{
-
-                              if(checkbox.checked){
-                                
-                                checked.push(checkbox);
-                              }
-
-                          })
+                          //find all boxes of letters
+                          let arrayOfLetterBoxes = document.getElementsByClassName("box");
 
                          
-                            return checked;
-                        }
-                        
-                        const getDesiredDataFromCheckBoxsAsArrayOfObjects = (arrayOfcheckedBoxes)=>{
-                            const dataObjects = [];//store objects of data from checkboxes
+                            //method turns html collection to array
+                            return Array.from(arrayOfLetterBoxes);
+                        }                                                     //array of boxes
+                  const getBackCheckboxesSeperatedByCheckedAndNotChecked = (arrayOfLetterTiles)=>{
+                            // const dataObjects = [];//store objects of data from checkboxes
+                            const checked = [];
+                            const notChecked =[];
+                            const arrayOfTileDataObj =[];
+                           
 
-                            arrayOfcheckedBoxes.forEach((box)=>{
-                                  
-                                  //destrcut data from each boz into an object
-                                  const [letter, multiplyer] = [...box.value];
-                                  const [letterInWord, indexOfLetterWithExtraScore] = [...box.id];
-                                 
+                            //loop through array of letter tiles and grab desired 
+                            //data make into object and push arrayOfTilesObj
+                            arrayOfLetterTiles.forEach((box)=>{
+                           
+                              arrayOfTileDataObj.push({
+                                        checkbox2X: box.children[1],
+                                        checkbox3X: box.children[3],
+                                        letter: box.children[0].innerHTML
+
+                                      });
                                
-                                  dataObjects.push(
-                                    {
-                                      letter,  
-                                      letterPoint:letterPoints[letter],
-                                      multiplyer,
-                                      indexOfLetterWithExtraScore//used to indicate the index of letter that has extra scoring
-                                    }
-                                  )
-
-                                  })
+                                  });
                                   
-                                  return dataObjects;
-                        } 
+                            //loop through arrayOfTileDataObjects and check which
+                            //have checked boxes and push to the right array
+                            arrayOfTileDataObj.forEach((tile)=>{
+                                    if(tile.checkbox2X.checked){
+                                      checked.push(tile);
+                                    }else if(tile.checkbox3X.checked){
+                                      checked.push(tile);
+                                    }else{
+                                      notChecked.push(tile);
+                                    }
+                                  });
 
-                        const printArrayOfTilesInMainContainer = (arrayOfElements,parentElement)=>{
+                            //return back both the checked and not checked arrays as obj
+
+                                 return [checked, notChecked];
+
+                                 
+                        } 
+                  const printArrayOfTilesInMainContainer = (arrayOfElements,parentElement)=>{
 
                           //loops throw array of elements and appends each to mainContainer
                           arrayOfElements.forEach((element,index)=>{
@@ -146,9 +141,7 @@
                           })
                         }  
                         
-                      
-
-                       const createTile = (letter,index)=>{
+                  const createTile = (letter,index)=>{
                     const containerDiv= document.createElement("div");
                     containerDiv.classList.add("box");
                     containerDiv.id = letter+index;
@@ -186,10 +179,8 @@
                     return containerDiv;
                   };
 
-
                   let processBtn = document.querySelector(".process-btn");
            
-
                   const getWordAsArrayOfChars = ()=>{
                           const word= document.querySelector("[name = wordInput]").value.toUpperCase();
                           const wordArray = [...word];
@@ -260,7 +251,6 @@
 
                     return containerDiv;
                   }
-                  //when button is clicked run a funcion
                   
                   const createTripleWordCheckbox = ()=>{
 
@@ -290,8 +280,7 @@
 
                       return containerDiv;
                   }
-                  
-                  
+                                   
                   const createBingoCheckbox = ()=>{
 
                       const containerDiv= document.createElement("div");
@@ -328,7 +317,7 @@
                          const arrayOfTiles = createArrayOfTiles(getWordAsArrayOfChars());
                     
                         const mainContainer = document.querySelector(".main-box");
-                        mainContainer.classList.add("b-red");
+                        
                 
                         printArrayOfTilesInMainContainer(arrayOfTiles,mainContainer);
                         
@@ -368,43 +357,55 @@
 
 
                       calculateBtn.addEventListener("click",(event)=>{
-                          const dataObjects = getDesiredDataFromCheckBoxsAsArrayOfObjects(getAllCheckedBoxesIntoArray());
-                         
-                          const getIndexOfLetterOfCheckedBox = (checkBoxData)=>{
-                            let indexOfLetterOfCheckedBox =[];
-                            checkBoxData.forEach((checkedBox)=>{
-                            indexOfLetterOfCheckedBox.push(parseInt(checkedBox.indexOfLetterWithExtraScore));
-                            })
-                            return indexOfLetterOfCheckedBox;
-                          };
-                          const getSpecialLetterScore = (checkBoxData)=>{
-                            let specialLetterScore =0;
+                       const result =  getBackCheckboxesSeperatedByCheckedAndNotChecked(getAllCheckboxesIntoArray());
+                        //result is an array with objects 
+
+                          const [checked, notChecked] = result;
+
+                          const getSpecialLetterScore = (checkedBoxes)=>{
+                          
+                            const specialLetterScoringDataStorage =[];
+
+                          //loop through all the checked boxes and pull out into an array the specific
+                          //special letter score eather 2x or 3x and letter
+                          checkedBoxes.forEach((tile)=>{
 
                             
-                            checkBoxData.forEach((checkedBox)=>{
-                           
-                            specialLetterScore+= checkedBox.letterPoint*checkedBox.multiplyer;
-                              
-                            
+                            if(tile.checkbox2X.checked){
+                              specialLetterScoringDataStorage.push(tile.checkbox2X.value);
+                            }else if (tile.checkbox3X.checked){
+                              specialLetterScoringDataStorage.push(tile.checkbox3X.value);
+                            }
+
+                          });
+
+                      
+
+                          // loop through array that is at top do scoring
+
+                          let specialLscore = 0;
+
+                          specialLetterScoringDataStorage.forEach((item)=>{
+                            const [letter, multiplyer] = [...item];
+                            specialLscore+= (parseInt(letterPoints[letter])*parseInt(multiplyer));
+                            // console.log(`letter ${letter} point ${letterPoints[letter]} multiplyer ${multiplyer} result ${parseInt(letterPoints[letter])*parseInt(multiplyer)}`)
                           })
 
-                          return specialLetterScore;
+                          return specialLscore;
                           }
-                          const getRegularLetterScore = (wordAsArray)=>{
-                            const indexOfLetterOfCheckedBox = getIndexOfLetterOfCheckedBox(dataObjects);
-                            let regularLetterScore = 0;
-                                wordAsArray.forEach((letter,index)=>{
-                              
-                              if(!indexOfLetterOfCheckedBox.includes(index)){
-                                
-                                regularLetterScore+=letterPoints[letter];
-                               
-                              }
 
+                          const getRegularLetterScore = (lettersNotChecked)=>{
+                           
+                            let regularLetterScore = 0;
+                            lettersNotChecked.forEach((tile,index)=>{
+                                
+                                regularLetterScore+=letterPoints[tile.letter];
+   
                             })
-                        
+                            
                             return regularLetterScore;
                           }
+                            
                           const checkIfBingoIsChecked = ()=>{
                           const bingo = getBingoCheckBox();
                           if(bingo.checked){
@@ -431,37 +432,43 @@
                           
 
                         }
-                          const getTotalScore = ()=>{
-                            let basicScore = getRegularLetterScore(getWordAsArrayOfChars()) + getSpecialLetterScore(dataObjects);
+                         
+                        const getTotalScore = ()=>{
+                            let score = 0;
+                            const scoreWithLetterMultiplyer = getSpecialLetterScore(checked);
+                            const normalLetterScore = getRegularLetterScore(notChecked);
+
+                            score+= scoreWithLetterMultiplyer+normalLetterScore;
+                            
+                          
+
                             const checkbox = returnCheckedBoxForSpecialWordScoring();
                             
                            
                             if(!checkbox == false){
-                            checkbox.name == "doubleWordCheckbox" || checkbox.name == "tripleWordCheckbox"  ?  basicScore*=  parseInt(checkbox.value) : undefined;
+                            checkbox.name == "doubleWordCheckbox" || checkbox.name == "tripleWordCheckbox"  ?  score*=  parseInt(checkbox.value) : undefined;
 
                             }  
 
                          
                           
-                            checkIfBingoIsChecked() ? basicScore+= parseInt(checkIfBingoIsChecked().value) : undefined;
+                            checkIfBingoIsChecked() ? score+= parseInt(checkIfBingoIsChecked().value) : undefined;
 
-                            return basicScore;
+                            return score;
 
                           }
                           
 
-                          console.log(`specialLetterScore: ${getSpecialLetterScore(dataObjects)}`);
-                          console.log(`regularLetterScore: ${getRegularLetterScore(getWordAsArrayOfChars())} `)
-                          console.log(`indexOfLetter: ${getIndexOfLetterOfCheckedBox(dataObjects)}`)
+                          console.log(`specialLetterScore: ${getSpecialLetterScore(checked)}`);
+                          console.log(`regularLetterScore: ${getRegularLetterScore(notChecked)} `)
                           console.log("Total Score: "+getTotalScore());
 
-                          specialLetterScoreP.textContent=`Total Letter Multiplyer Score: ${getSpecialLetterScore(dataObjects)}`;
-                          regularLetterScoreP.textContent= `Regular Letter Score: ${getRegularLetterScore(getWordAsArrayOfChars())}`;
+                          specialLetterScoreP.textContent=`Total Letter Multiplyer Score: ${getSpecialLetterScore(checked)}`;
+                          regularLetterScoreP.textContent= `Regular Letter Score: ${getRegularLetterScore(notChecked)}`;
                           totalScoreP.textContent=`Total Score: ${getTotalScore()}`;
                           
-
-                          mainContainer.appendChild(specialLetterScoreP);
                           mainContainer.appendChild(regularLetterScoreP);
+                          mainContainer.appendChild(specialLetterScoreP);
                           mainContainer.appendChild(totalScoreP);
 
                       })
@@ -476,8 +483,6 @@
                   });
  
                 });
-            // LEFT OFF ON THE FOLLOWING
-            //-make all letters Uppercase
-            //-start adding styles to it!!!
+
       </script>
 <%- include('partials/footer') %>
